@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(PlayerMotor))]
 [RequireComponent(typeof(ConfigurableJoint))]
 
@@ -15,6 +16,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float thrusterForce = 1000f;
 
+    
+    
+
+
     [Header("Spring Settings :")]
     [SerializeField]
     private JointProjectionMode jointMode;
@@ -25,16 +30,17 @@ public class PlayerController : MonoBehaviour
     private float jointMaxForce = 40f;
 
 
-
+    //Component caching 
     private PlayerMotor motor;
     private ConfigurableJoint joint;
+    private Animator animator;
 
 
     void Start()
     {
         motor = GetComponent<PlayerMotor>();
         joint = GetComponent<ConfigurableJoint>();
-
+        animator = GetComponent<Animator>();
         SetJointSettings(jointSpring);
     }
 
@@ -44,8 +50,8 @@ public class PlayerController : MonoBehaviour
         
         // horizontal ranges from (-1, 0, 0) to (1, 0, 0) 
         // vertical ranges from (0, 0, -1) to (0, 0, 1) 
-        float _xMov = Input.GetAxisRaw("Horizontal");
-        float _zMov = Input.GetAxisRaw("Vertical");         
+        float _xMov = Input.GetAxis("Horizontal");
+        float _zMov = Input.GetAxis("Vertical");         
         //the 'horizontal' and 'vertical' axes are enlisted under edit -> project settings -> input
 
 
@@ -53,8 +59,10 @@ public class PlayerController : MonoBehaviour
         Vector3 _movVertical = transform.forward * _zMov;   // on standing still default vectors (0, 0, 0) ; while moving forward vectors (0, 0, 1) and (0, 0, -1) while on backwards
 
         //Final Movement Vector combining x and z movement
-        Vector3 _velocity = (_movHorizontal + _movVertical).normalized * speed;
+        Vector3 _velocity = (_movHorizontal + _movVertical) * speed;
 
+        //Animate Movement
+        animator.SetFloat("ForwardVelocity", _zMov); 
 
         //Apply Movement
         motor.Move(_velocity);
@@ -81,7 +89,7 @@ public class PlayerController : MonoBehaviour
         float _cameraRotationX = _xRot * lookSensitivity; //this is for rotation of player left and right... around Y axis
 
         //Apply Rotation
-        motor.RotateCamera(_cameraRotationX);
+        motor.RotateCamera(_cameraRotationX); 
         
         //-----------ROTATION SECTION END----------------
 
