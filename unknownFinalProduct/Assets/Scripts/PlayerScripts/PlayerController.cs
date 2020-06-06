@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //-----------MOVEMENT SECTION----------------
+        //-----------MOVEMENT SECTION-----------------
         
         // horizontal ranges from (-1, 0, 0) to (1, 0, 0) 
         // vertical ranges from (0, 0, -1) to (0, 0, 1) 
