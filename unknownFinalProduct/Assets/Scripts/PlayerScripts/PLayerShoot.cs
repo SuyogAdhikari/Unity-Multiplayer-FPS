@@ -32,8 +32,9 @@ public class PLayerShoot : NetworkBehaviour
 
         if(currentWeapon.fireRate <= 0f)
         {
-            if(Input.GetButtonDown("Fire1")){
-            Shoot();
+            if(Input.GetButtonDown("Fire1"))
+            {
+                Shoot();
             }
         }else{
 
